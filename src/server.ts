@@ -1,10 +1,23 @@
+process.on("uncaughtException", (err) => {
+  console.error("🔥 UNCAUGHT EXCEPTION");
+  console.error(err);
+  console.error(err instanceof Error ? err.stack : "Not an Error");
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("🔥 UNHANDLED REJECTION");
+  console.error(reason);
+  process.exit(1);
+});
+
 import dotenv from "dotenv";
-import app from "./app.js";
-import mongoose from "mongoose";
 import path from "path";
 dotenv.config({
   path: path.resolve(process.cwd(), "config.env"),
 });
+import mongoose from "mongoose";
+import app from "./app.ts";
 
 const port = process.env.PORT || 3000;
 
@@ -24,3 +37,7 @@ const connectDB = async () => {
 };
 
 connectDB();
+
+// "exec": "node --trace-warnings --loader ts-node/esm ./src/server.ts"
+
+// "exec": "node -r ts-node/register ./src/server.ts"
