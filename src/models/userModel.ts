@@ -3,7 +3,7 @@ import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import validator from "validator";
 
-import type IUser from "../types/user.ts";
+import type { IUser } from "../types/user.ts";
 
 const userSchema = new mongoose.Schema<IUser>({
   name: {

@@ -3,7 +3,7 @@ import catchAsync from "../utils/catchAsync.ts";
 import AppError from "../utils/appError.ts";
 
 import type { Request, Response, NextFunction } from "express";
-import type IBudget from "../types/budget.ts";
+import type { IBudget } from "../types/budget.ts";
 
 export const createBudget = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

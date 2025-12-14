@@ -3,8 +3,7 @@ import catchAsync from "../utils/catchAsync.ts";
 import AppError from "../utils/appError.ts";
 
 import type { Request, Response, NextFunction } from "express";
-import type IExpense from "../types/expense.ts";
-import { nextTick } from "node:process";
+import type { IExpense } from "../types/expense.ts";
 
 // CREATE EXPENSE
 export const createExpense = catchAsync(
@@ -12,7 +11,7 @@ export const createExpense = catchAsync(
     // Create expense
     const expense: IExpense = await Expense.create({
       title: req.body.title,
-      user: req.user._id,
+      user: req.user!._id,
       amount: req.body.amount,
       description: req.body.description,
       date: req.body.date,
@@ -33,7 +32,7 @@ export const createExpense = catchAsync(
 export const getAllExpenses = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // Get all expenses
-    const expenses: IExpense[] = await Expense.find({ user: req.user._id });
+    const expenses: IExpense[] = await Expense.find({ user: req.user!._id });
 
     // Send response
     res.status(200).json({

@@ -1,6 +1,6 @@
 import type { Document } from "mongoose";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   name: string;
   email: string;
   role: "user" | "admin";
@@ -22,5 +22,3 @@ interface IUser extends Document {
   createPasswordResetToken(): string;
   changedPasswordAfterJWT(JWTTimestamp: number | undefined): boolean;
 }
-
-export default IUser;
