@@ -14,6 +14,7 @@ import {
   getMe,
   getOneUser,
   updateMe,
+  setExpoPushToken,
 } from "../controllers/userController.ts";
 
 const router = express.Router();
@@ -35,5 +36,6 @@ router.get("/getOneUser/:id", restrictTo("admin"), getOneUser);
 router.get("/me", getMe);
 
 router.patch("/updateMe", updateMe);
+router.patch("/expoPushToken", setExpoPushToken);
 
 export default router;

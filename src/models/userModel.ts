@@ -26,6 +26,15 @@ const userSchema = new mongoose.Schema<IUser>({
     type: Date,
     default: Date.now,
   },
+  country: {
+    type: String,
+    default: "Nigeria",
+  },
+  currency: {
+    type: String,
+    default: "NGN",
+  },
+  expoPushToken: String,
   password: {
     type: String,
     required: [true, "Please provide a password"],

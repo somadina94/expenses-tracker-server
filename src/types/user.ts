@@ -10,6 +10,9 @@ interface IUser extends Document {
   passwordResetToken?: string | null;
   passwordResetTokenExpires?: Date | null;
   createdAt?: Date;
+  country?: string;
+  currency?: string;
+  expoPushToken?: string;
 
   // Methods
   correctPassword(
