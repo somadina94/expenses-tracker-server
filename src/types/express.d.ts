@@ -1,4 +1,4 @@
-import { IUser } from "./user"; // adjust the path to your IUser type
+import { IUser } from "./user.ts"; // adjust the path to your IUser type
 
 declare global {
   namespace Express {

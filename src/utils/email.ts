@@ -3,7 +3,7 @@ import { fileURLToPath } from "url";
 import pug from "pug";
 import nodemailer from "nodemailer";
 import { htmlToText } from "html-to-text";
-import type IUser from "../types/user.ts";
+import type { IUser } from "../types/user.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

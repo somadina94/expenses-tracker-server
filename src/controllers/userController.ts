@@ -52,7 +52,7 @@ export const updateMe = catchAsync(
     }
 
     // Find and update user
-    const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {
+    const updatedUser = await User.findByIdAndUpdate(req.user?._id, req.body, {
       new: true,
     });
 
@@ -95,7 +95,7 @@ export const setExpoPushToken = catchAsync(
     }
     // Update user with token
     const updatedUser = await User.findByIdAndUpdate(
-      req.user._id,
+      req.user?._id,
       { expoPushToken },
       { new: true }
     );

@@ -5,7 +5,7 @@ import crypto from "crypto";
 import User from "../models/userModel.ts";
 import Email from "../utils/email.ts";
 
-import type IUser from "../types/user.ts";
+import type { IUser } from "../types/user.ts";
 import type { JwtPayload } from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
 // A helper function to sign jwt
