@@ -24,6 +24,8 @@ services:
       - "6010:6010"
     environment:
       - NODE_ENV=production
+    env_file:
+      - .env
     restart: unless-stopped
     volumes:
       - ./logs:/app/logs
