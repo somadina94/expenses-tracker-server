@@ -1,9 +1,9 @@
-import Budget from "../models/budgetModel.ts";
-import catchAsync from "../utils/catchAsync.ts";
-import AppError from "../utils/appError.ts";
+import Budget from "../models/budgetModel.js";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
 
 import type { Request, Response, NextFunction } from "express";
-import type { IBudget } from "../types/budget.ts";
+import type { IBudget } from "../types/budget.js";
 
 export const createBudget = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

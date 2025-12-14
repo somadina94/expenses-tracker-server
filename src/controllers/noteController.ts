@@ -1,20 +1,19 @@
-import Note from "../models/noteModel.ts";
-import catchAsync from "../utils/catchAsync.ts";
-import AppError from "../utils/appError.ts";
+import Note from "../models/noteModel.js";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
 
 import type { Request, Response, NextFunction } from "express";
-import type { INote } from "../types/note.ts";
+import type { INote } from "../types/note.js";
 
 export const createNote = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { title, content, reminder }: INote = req.body;
-    const userId = req.user!._id;
 
+    const userId = req.user!._id;
     if (!userId) {
       return next(new AppError("User not authenticated", 401));
     }
     const newNote = await Note.create({ title, content, reminder, userId });
-
     res.status(201).json({
       status: "success",
       data: { note: newNote },

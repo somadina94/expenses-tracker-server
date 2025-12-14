@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import type { IBudget } from "../types/budget.ts";
+import type { IBudget } from "../types/budget.js";
 
 const budgetSchema = new mongoose.Schema<IBudget>({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },

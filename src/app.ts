@@ -1,10 +1,10 @@
 import express from "express";
-import globalErrorHandler from "./controllers/errorController.ts";
-import AppError from "./utils/appError.ts";
-import userRouter from "./routes/userRoutes.ts";
-import expenseRouter from "./routes/expenseRoutes.ts";
-import budgetRouter from "./routes/budgetRoutes.ts";
-import noteRouter from "./routes/noteRoutes.ts";
+import globalErrorHandler from "./controllers/errorController.js";
+import AppError from "./utils/appError.js";
+import userRouter from "./routes/userRoutes.js";
+import expenseRouter from "./routes/expenseRoutes.js";
+import budgetRouter from "./routes/budgetRoutes.js";
+import noteRouter from "./routes/noteRoutes.js";
 
 import type { Request, Response, NextFunction } from "express";
 

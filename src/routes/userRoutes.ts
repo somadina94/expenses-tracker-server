@@ -8,14 +8,14 @@ import {
   resetPassowrd,
   restrictTo,
   updatePassword,
-} from "../controllers/authController.ts";
+} from "../controllers/authController.js";
 import {
   getAllUsers,
   getMe,
   getOneUser,
   updateMe,
   setExpoPushToken,
-} from "../controllers/userController.ts";
+} from "../controllers/userController.js";
 
 const router = express.Router();
 

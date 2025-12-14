@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import type { IExpense } from "../types/expense.ts";
+import type { IExpense } from "../types/expense.js";
 
 const expenseSchema = new mongoose.Schema<IExpense>({
   title: { type: String, required: true },
