@@ -82,3 +82,30 @@ export const getMe = catchAsync(
     });
   }
 );
+
+// Set exposeNotificationsToken
+export const setExpoPushToken = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Get token from body
+    const { expoPushToken } = req.body;
+    if (!expoPushToken) {
+      return next(
+        new AppError("Please provide a valid expose notifications token", 400)
+      );
+    }
+    // Update user with token
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { expoPushToken },
+      { new: true }
+    );
+    // Send response
+    res.status(200).json({
+      status: "success",
+      message: "Expose notifications token set successfully",
+      data: {
+        user: updatedUser,
+      },
+    });
+  }
+);

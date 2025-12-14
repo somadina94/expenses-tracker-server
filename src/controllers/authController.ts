@@ -41,11 +41,13 @@ const createSendToken = (
 export const signUp = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // Create user
-    const user = await User.create({
+    const user: IUser = await User.create({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
+      country: req.body.country,
+      currency: req.body.currency,
     });
 
     // Send welcome email
