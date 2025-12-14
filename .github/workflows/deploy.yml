@@ -20,6 +20,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
-            cd ~/jahbyte
+            cd ~/expenses_tracker
             sudo git pull origin master
             sudo ./deploy.sh
