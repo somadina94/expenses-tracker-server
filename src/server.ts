@@ -14,7 +14,7 @@ process.on("unhandledRejection", (reason) => {
 import dotenv from "dotenv";
 import path from "path";
 dotenv.config({
-  path: path.resolve(process.cwd(), "config.env"),
+  path: path.resolve(process.cwd(), ".env"),
 });
 import mongoose from "mongoose";
 import app from "./app.js";
