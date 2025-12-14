@@ -21,7 +21,7 @@ ARG COMPANY_NAME
 
 # Copy package files and install dependencies
 COPY package*.json tsconfig*.json ./
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 # Copy source files
 COPY src ./src
