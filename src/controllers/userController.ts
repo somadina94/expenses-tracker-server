@@ -1,6 +1,6 @@
-import User from "../models/userModel.ts";
-import catchAsync from "../utils/catchAsync.ts";
-import AppError from "../utils/appError.ts";
+import User from "../models/userModel.js";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
 
 import type { Request, Response, NextFunction } from "express";
 

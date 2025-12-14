@@ -5,8 +5,8 @@ import {
   getNote,
   updateNote,
   deleteNote,
-} from "../controllers/noteController.ts";
-import { protect } from "../controllers/authController.ts";
+} from "../controllers/noteController.js";
+import { protect } from "../controllers/authController.js";
 
 const router = express.Router();
 

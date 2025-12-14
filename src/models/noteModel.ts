@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import type { INote } from "../types/note.ts";
+import type { INote } from "../types/note.js";
+import { Document } from "mongoose";
 
 const noteSchema = new mongoose.Schema<INote>({
   title: { type: String, required: true },

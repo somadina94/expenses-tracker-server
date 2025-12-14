@@ -1,11 +1,11 @@
-import catchAsync from "../utils/catchAsync.ts";
-import AppError from "../utils/appError.ts";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import User from "../models/userModel.ts";
-import Email from "../utils/email.ts";
+import User from "../models/userModel.js";
+import Email from "../utils/email.js";
 
-import type { IUser } from "../types/user.ts";
+import type { IUser } from "../types/user.js";
 import type { JwtPayload } from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
 // A helper function to sign jwt

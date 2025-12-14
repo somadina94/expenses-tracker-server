@@ -17,7 +17,7 @@ dotenv.config({
   path: path.resolve(process.cwd(), "config.env"),
 });
 import mongoose from "mongoose";
-import app from "./app.ts";
+import app from "./app.js";
 
 const port = process.env.PORT || 3000;
 

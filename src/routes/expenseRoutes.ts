@@ -5,8 +5,8 @@ import {
   getOneExpense,
   updateExpense,
   deleteExpense,
-} from "../controllers/expenseController.ts";
-import { protect } from "../controllers/authController.ts";
+} from "../controllers/expenseController.js";
+import { protect } from "../controllers/authController.js";
 
 const router = express.Router();
 

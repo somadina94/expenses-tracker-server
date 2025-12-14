@@ -5,8 +5,8 @@ import {
   getBudgetById,
   updateBudget,
   deleteBudget,
-} from "../controllers/budgetController.ts";
-import { protect } from "../controllers/authController.ts";
+} from "../controllers/budgetController.js";
+import { protect } from "../controllers/authController.js";
 
 const router = express.Router();
 

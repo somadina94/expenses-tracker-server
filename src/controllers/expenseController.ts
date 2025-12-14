@@ -1,9 +1,9 @@
-import Expense from "../models/expenseModel.ts";
-import catchAsync from "../utils/catchAsync.ts";
-import AppError from "../utils/appError.ts";
+import Expense from "../models/expenseModel.js";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
 
 import type { Request, Response, NextFunction } from "express";
-import type { IExpense } from "../types/expense.ts";
+import type { IExpense } from "../types/expense.js";
 
 // CREATE EXPENSE
 export const createExpense = catchAsync(

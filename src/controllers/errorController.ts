@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import AppError from "../utils/appError.ts";
+import AppError from "../utils/appError.js";
 
 const handleDuplicateFieldDB = (err: any) => {
   const [key] = Object.keys(err.keyValue);
