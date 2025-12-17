@@ -114,7 +114,7 @@ export const setExpoPushToken = catchAsync(
 export const deleteMe = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // GET /notes/:id
-    const user: IUser | null = await User.findById(req.params.id);
+    const user: IUser | null = await User.findById(req.user!._id);
 
     // Check if exists
     if (!user) {
