@@ -72,6 +72,7 @@ export const updateBudget = catchAsync(
     }
     res.status(200).json({
       status: "success",
+      message: "Budget updated successfully",
       data: { budget: updatedBudget },
     });
   }
@@ -91,8 +92,6 @@ export const deleteBudget = catchAsync(
     // delete budget
     await Budget.findByIdAndDelete(budgetId);
 
-    res.status(204).json({
-      status: "success",
-    });
+    res.status(204);
   }
 );
