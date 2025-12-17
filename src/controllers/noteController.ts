@@ -16,6 +16,7 @@ export const createNote = catchAsync(
     const newNote = await Note.create({ title, content, reminder, userId });
     res.status(201).json({
       status: "success",
+      message: "Note created successfully",
       data: { note: newNote },
     });
   }
@@ -76,6 +77,7 @@ export const updateNote = catchAsync(
     }
     res.status(200).json({
       status: "success",
+      message: "Note updated successfully",
       data: { note: updatedNote },
     });
   }
@@ -93,9 +95,6 @@ export const deleteNote = catchAsync(
 
     // DELETE /notes/:id
     await Note.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
+    res.status(204);
   }
 );
