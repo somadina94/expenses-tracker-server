@@ -13,6 +13,7 @@ export const createBudget = catchAsync(
 
     res.status(201).json({
       status: "success",
+      message: "Budget created successfully",
       data: { budget: newBudget },
     });
   }
@@ -24,7 +25,7 @@ export const getAllBudgets = catchAsync(
 
     // Base query (always filter by user)
     const query: any = {
-      user: req.user!._id,
+      userId: req.user!._id,
     };
 
     // Add filters only if they exist
