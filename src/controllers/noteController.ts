@@ -28,7 +28,7 @@ export const getAllNotes = catchAsync(
 
     // Base query (always filter by user)
     const query: any = {
-      user: req.user!._id,
+      userId: req.user!._id,
     };
 
     // Add date filter only if params exist
