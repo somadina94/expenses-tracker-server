@@ -33,14 +33,14 @@ export const getAllNotes = catchAsync(
 
     // Add date filter only if params exist
     if (startDate || endDate) {
-      query.date = {};
+      query.updatedAt = {};
 
       if (startDate) {
-        query.date.$gte = new Date(startDate as string);
+        query.updatedAt.$gte = new Date(startDate as string);
       }
 
       if (endDate) {
-        query.date.$lte = new Date(endDate as string);
+        query.updatedAt.$lte = new Date(endDate as string);
       }
     }
     const notes: INote[] = await Note.find(query);
