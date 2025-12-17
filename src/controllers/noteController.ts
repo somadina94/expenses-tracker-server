@@ -23,7 +23,26 @@ export const createNote = catchAsync(
 
 export const getAllNotes = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const notes = await Note.find();
+    const { startDate, endDate } = req.query;
+
+    // Base query (always filter by user)
+    const query: any = {
+      user: req.user!._id,
+    };
+
+    // Add date filter only if params exist
+    if (startDate || endDate) {
+      query.date = {};
+
+      if (startDate) {
+        query.date.$gte = new Date(startDate as string);
+      }
+
+      if (endDate) {
+        query.date.$lte = new Date(endDate as string);
+      }
+    }
+    const notes: INote[] = await Note.find(query);
     res.status(200).json({
       status: "success",
       results: notes.length,

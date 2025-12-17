@@ -31,10 +31,28 @@ export const createExpense = catchAsync(
 // GET ALL EXPENSES
 export const getAllExpenses = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    // Get all expenses
-    const expenses: IExpense[] = await Expense.find({ user: req.user!._id });
+    const { startDate, endDate } = req.query;
 
-    // Send response
+    // Base query (always filter by user)
+    const query: any = {
+      user: req.user!._id,
+    };
+
+    // Add date filter only if params exist
+    if (startDate || endDate) {
+      query.date = {};
+
+      if (startDate) {
+        query.date.$gte = new Date(startDate as string);
+      }
+
+      if (endDate) {
+        query.date.$lte = new Date(endDate as string);
+      }
+    }
+
+    const expenses: IExpense[] = await Expense.find(query);
+
     res.status(200).json({
       status: "success",
       data: {
