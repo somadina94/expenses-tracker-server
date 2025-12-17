@@ -3,6 +3,7 @@ import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 
 import type { Request, Response, NextFunction } from "express";
+import type { IUser } from "../types/user.js";
 
 // GET ALL USERS
 export const getAllUsers = catchAsync(
@@ -107,5 +108,21 @@ export const setExpoPushToken = catchAsync(
         user: updatedUser,
       },
     });
+  }
+);
+
+export const deleteMe = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // GET /notes/:id
+    const user: IUser | null = await User.findById(req.params.id);
+
+    // Check if exists
+    if (!user) {
+      return next(new AppError("No user found with that ID", 404));
+    }
+
+    // DELETE /notes/:id
+    await User.findByIdAndDelete(req.params.id);
+    res.status(204);
   }
 );

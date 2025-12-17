@@ -1,9 +1,13 @@
-import mongoose, { Model } from "mongoose";
+import mongoose, { Model, Query } from "mongoose";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import validator from "validator";
+import Expense from "./expenseModel.js";
+import Budget from "./budgetModel.js";
+import Note from "./noteModel.js";
 
 import type { IUser } from "../types/user.js";
+import type { NextFunction } from "express";
 
 const userSchema = new mongoose.Schema<IUser>({
   name: {
@@ -62,6 +66,20 @@ userSchema.pre<IUser>("save", async function () {
 
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = "";
+});
+
+userSchema.pre("findOneAndDelete", async function (this: Query<any, IUser>) {
+  const user = await this.model.findOne(this.getQuery());
+
+  if (!user) return;
+
+  const userId = user._id;
+
+  await Promise.all([
+    Expense.deleteMany({ user: userId }),
+    Budget.deleteMany({ userId }),
+    Note.deleteMany({ userId }),
+  ]);
 });
 
 // Instance methods
