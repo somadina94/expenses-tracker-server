@@ -92,6 +92,9 @@ export const deleteBudget = catchAsync(
     // delete budget
     await Budget.findByIdAndDelete(budgetId);
 
-    res.status(204);
+    res.status(200).json({
+      status: "success",
+      message: "Budget deleted successfully",
+    });
   }
 );

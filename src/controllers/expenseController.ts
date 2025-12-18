@@ -118,8 +118,9 @@ export const deleteExpense = catchAsync(
     await Expense.findByIdAndDelete(req.params.id);
 
     // Send response
-    res.status(204).json({
+    res.status(200).json({
       status: "success",
+      message: "Expense deleted successfully",
     });
   }
 );
