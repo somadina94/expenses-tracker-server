@@ -95,6 +95,9 @@ export const deleteNote = catchAsync(
 
     // DELETE /notes/:id
     await Note.findByIdAndDelete(req.params.id);
-    res.status(204);
+    res.status(200).json({
+      status: "success",
+      message: "Note deleted successfully",
+    });
   }
 );

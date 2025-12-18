@@ -123,6 +123,9 @@ export const deleteMe = catchAsync(
 
     // DELETE /notes/:id
     await User.findOneAndDelete(req.user!._id);
-    res.status(204);
+    res.status(200).json({
+      status: "success",
+      message: "Your data has been completed deleted",
+    });
   }
 );
