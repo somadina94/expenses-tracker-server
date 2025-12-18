@@ -122,7 +122,7 @@ export const deleteMe = catchAsync(
     }
 
     // DELETE /notes/:id
-    await User.findByIdAndDelete(req.params.id);
+    await User.findOneAndDelete(req.user!._id);
     res.status(204);
   }
 );

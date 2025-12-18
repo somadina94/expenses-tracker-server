@@ -68,12 +68,10 @@ userSchema.pre<IUser>("save", async function () {
   this.passwordConfirm = "";
 });
 
-userSchema.pre("findOneAndDelete", async function (this: Query<any, IUser>) {
-  const user = await this.model.findOne(this.getQuery());
+userSchema.post("findOneAndDelete", async function (doc: IUser | null) {
+  if (!doc) return;
 
-  if (!user) return;
-
-  const userId = user._id;
+  const userId = doc._id;
 
   await Promise.all([
     Expense.deleteMany({ user: userId }),
