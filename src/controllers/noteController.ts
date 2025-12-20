@@ -15,7 +15,13 @@ export const createNote = catchAsync(
     if (!userId) {
       return next(new AppError("User not authenticated", 401));
     }
-    const note = await Note.create({ title, content, reminder, userId });
+    const parsedReminder = new Date(reminder);
+    const note = await Note.create({
+      title,
+      content,
+      reminder: parsedReminder,
+      userId,
+    });
 
     if (note.reminder) {
       const notification = await NotificationService.create({
