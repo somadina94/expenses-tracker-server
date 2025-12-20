@@ -111,7 +111,9 @@ export const setExpoPushToken = catchAsync(
       });
     }
 
-    user.expoPushToken.push(expoPushToken);
+    user.expoPushToken = Array.from(
+      new Set([...user.expoPushToken, expoPushToken])
+    );
 
     await user.save({ validateBeforeSave: false });
 
