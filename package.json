@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc && cp -r src/views dist/",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "worker:notifications:dev": "tsx watch src/workers/notification-worker.ts",
+    "worker:notifications:prod": "node dist/workers/notification.worker.js"
   },
   "keywords": [],
   "author": "",
@@ -14,9 +16,12 @@
   "type": "module",
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "bullmq": "^5.66.2",
     "dotenv": "^17.2.3",
+    "expo-server-sdk": "^4.0.0",
     "express": "^5.2.1",
     "html-to-text": "^9.0.5",
+    "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.0.1",
     "nodemailer": "^7.0.11",
@@ -27,7 +32,7 @@
     "@types/express": "^5.0.6",
     "@types/html-to-text": "^9.0.4",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^25.0.1",
+    "@types/node": "^25.0.3",
     "@types/nodemailer": "^7.0.4",
     "@types/pug": "^2.0.10",
     "@types/validator": "^13.15.10",

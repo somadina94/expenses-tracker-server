@@ -1,7 +1,16 @@
 version: "3.8"
 
 services:
-  williams-portfolio:
+  redis:
+    image: redis:7-alpine
+    container_name: expenses-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - expenses-network
+
+  api:
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,7 +32,8 @@ services:
     ports:
       - "6010:6010"
     environment:
-      - NODE_ENV=production
+      NODE_ENV: production
+      REDIS_URL: redis://redis:6379
     env_file:
       - .env
     restart: unless-stopped
@@ -31,6 +41,23 @@ services:
       - ./logs:/app/logs
     networks:
       - expenses-network
+    depends_on:
+      - redis
+
+  notifications-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: notifications-worker
+    command: npm run worker:notifications:prod
+    environment:
+      NODE_ENV: production
+      REDIS_URL: redis://redis:6379
+    restart: unless-stopped
+    networks:
+      - expenses-network
+    depends_on:
+      - redis
 
 networks:
   expenses-network:

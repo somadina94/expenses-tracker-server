@@ -91,21 +91,26 @@ export const setExpoPushToken = catchAsync(
     const { expoPushToken } = req.body;
     if (!expoPushToken) {
       return next(
-        new AppError("Please provide a valid expose notifications token", 400)
+        new AppError("Please provide a valid expo notifications token", 400)
       );
     }
+    if (req.user!.expoPushToken?.includes(expoPushToken)) {
+      return res.status(200).json({
+        status: "success",
+        message: "Already subscribed to push notification",
+      });
+    }
     // Update user with token
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user?._id,
-      { expoPushToken },
-      { new: true }
-    );
+    const user = await User.findById(req.user!._id);
+
+    user?.expoPushToken?.push(expoPushToken);
+    await user?.save({ validateBeforeSave: false });
     // Send response
     res.status(200).json({
       status: "success",
-      message: "Expose notifications token set successfully",
+      message: "Expo notifications token set successfully",
       data: {
-        user: updatedUser,
+        user,
       },
     });
   }
