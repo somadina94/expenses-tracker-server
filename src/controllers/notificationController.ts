@@ -12,7 +12,7 @@ import type { INotification } from "../types/notification.js";
 export const getAllNotifications = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const notifications: INotification[] = await Notification.find({
-      _id: req.user!._id,
+      userId: req.user!._id,
     }).sort({
       createdAt: -1,
     });
