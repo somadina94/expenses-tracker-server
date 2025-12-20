@@ -5,6 +5,7 @@ import userRouter from "./routes/userRoutes.js";
 import expenseRouter from "./routes/expenseRoutes.js";
 import budgetRouter from "./routes/budgetRoutes.js";
 import noteRouter from "./routes/noteRoutes.js";
+import notificationRouter from "./routes/notificationRoutes.js";
 
 import type { Request, Response, NextFunction } from "express";
 
@@ -16,6 +17,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/expenses", expenseRouter);
 app.use("/api/v1/budgets", budgetRouter);
 app.use("/api/v1/notes", noteRouter);
+app.use("/api/v1/notifications", notificationRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

@@ -57,13 +57,13 @@ export class NotificationService {
           badge: notification.badge as number,
           ttl: notification.ttl as number,
           expiration: notification.expiration as number,
-          fcmOptions: {
-            serverKey: process.env.GOOGLE_APPLICATION_CREDENTIALS!,
-          },
         }));
 
       if (!messages.length) {
-        throw new Error("No valid Expo push tokens");
+        await Notification.findByIdAndUpdate(notification._id, {
+          sendError: "No valid Expo push tokens",
+        });
+        return;
       }
 
       const notificationResponse = await expo.sendPushNotificationsAsync(
