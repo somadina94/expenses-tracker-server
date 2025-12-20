@@ -53,6 +53,8 @@ services:
     environment:
       NODE_ENV: production
       REDIS_URL: redis://redis:6379
+    env_file:
+      - .env
     restart: unless-stopped
     networks:
       - expenses-network
