@@ -38,11 +38,14 @@ export const createNote = catchAsync(
       const delay = new Date(note.reminder).getTime() - Date.now();
 
       if (delay > 0) {
-        await notificationQueue.add(
+        const job = await notificationQueue.add(
           "send-notification",
           { notificationId: notification._id.toString() },
           { delay }
         );
+        console.log("Job added to queue:", job.id);
+      } else {
+        console.log("Reminder time is in the past; skipping queue");
       }
     }
     res.status(201).json({
