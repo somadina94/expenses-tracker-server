@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     default: "NGN",
   },
-  expoPushToken: String,
+  expoPushToken: [String],
   password: {
     type: String,
     required: [true, "Please provide a password"],

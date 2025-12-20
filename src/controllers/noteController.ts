@@ -1,6 +1,8 @@
 import Note from "../models/noteModel.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
+import { notificationQueue } from "../queues/notification-queue.js";
+import { NotificationService } from "../services/notification-service.js";
 
 import type { Request, Response, NextFunction } from "express";
 import type { INote } from "../types/note.js";
@@ -13,11 +15,34 @@ export const createNote = catchAsync(
     if (!userId) {
       return next(new AppError("User not authenticated", 401));
     }
-    const newNote = await Note.create({ title, content, reminder, userId });
+    const note = await Note.create({ title, content, reminder, userId });
+
+    if (note.reminder) {
+      const notification = await NotificationService.create({
+        userId: note.userId,
+        to: req.user!.expoPushToken!,
+        title: "Reminder on your note",
+        body: note.title,
+        data: {
+          route: "Notes",
+          params: { noteId: note._id.toString() },
+        },
+      });
+
+      const delay = new Date(note.reminder).getTime() - Date.now();
+
+      if (delay > 0) {
+        await notificationQueue.add(
+          "send-notification",
+          { notificationId: notification._id.toString() },
+          { delay }
+        );
+      }
+    }
     res.status(201).json({
       status: "success",
       message: "Note created successfully",
-      data: { note: newNote },
+      data: { note },
     });
   }
 );

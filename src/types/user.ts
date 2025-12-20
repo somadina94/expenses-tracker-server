@@ -12,7 +12,7 @@ export interface IUser extends Document {
   createdAt?: Date;
   country?: string;
   currency?: string;
-  expoPushToken?: string;
+  expoPushToken?: string[];
 
   // Methods
   correctPassword(
