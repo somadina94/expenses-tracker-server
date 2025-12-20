@@ -43,7 +43,7 @@ export class NotificationService {
   /**
    * Send notification via Expo and update status
    */
-  static async send(notification: NotificationDocument): Promise<void> {
+  static async send(notification: NotificationDocument): Promise<any> {
     try {
       const messages: ExpoPushMessage[] = notification.to
         .filter((token) => Expo.isExpoPushToken(token))
@@ -57,18 +57,33 @@ export class NotificationService {
           badge: notification.badge as number,
           ttl: notification.ttl as number,
           expiration: notification.expiration as number,
+          fcmOptions: {
+            serverKey: process.env.GOOGLE_APPLICATION_CREDENTIALS!,
+          },
         }));
 
       if (!messages.length) {
         throw new Error("No valid Expo push tokens");
       }
 
-      await expo.sendPushNotificationsAsync(messages);
+      const notificationResponse = await expo.sendPushNotificationsAsync(
+        messages
+      );
 
-      await Notification.findByIdAndUpdate(notification._id, {
-        sentAt: new Date(),
-        sendError: null,
+      notificationResponse.forEach(async (el) => {
+        if (el.status !== "ok") {
+          await Notification.findByIdAndUpdate(notification._id, {
+            sendError: el.message,
+          });
+        } else {
+          await Notification.findByIdAndUpdate(notification._id, {
+            sentAt: new Date(),
+            sendError: null,
+          });
+        }
       });
+
+      return notificationResponse;
     } catch (err) {
       await Notification.findByIdAndUpdate(notification._id, {
         sendError:

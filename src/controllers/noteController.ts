@@ -27,7 +27,7 @@ export const createNote = catchAsync(
       const notification = await NotificationService.create({
         userId: note.userId,
         to: req.user!.expoPushToken!,
-        title: "Reminder on your note",
+        title: "Note reminder",
         body: note.title,
         data: {
           route: "Notes",
