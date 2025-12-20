@@ -84,34 +84,41 @@ export const getMe = catchAsync(
   }
 );
 
-// Set exposeNotificationsToken
 export const setExpoPushToken = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    // Get token from body
     const { expoPushToken } = req.body;
+
     if (!expoPushToken) {
       return next(
         new AppError("Please provide a valid expo notifications token", 400)
       );
     }
-    if (req.user!.expoPushToken?.includes(expoPushToken)) {
+
+    const user = await User.findById(req.user!._id);
+    if (!user) {
+      return next(new AppError("You are not logged in", 401));
+    }
+
+    // Ensure array exists
+    if (!Array.isArray(user.expoPushToken)) {
+      user.expoPushToken = [];
+    }
+
+    if (user.expoPushToken.includes(expoPushToken)) {
       return res.status(200).json({
         status: "success",
         message: "Already subscribed to push notification",
       });
     }
-    // Update user with token
-    const user = await User.findById(req.user!._id);
 
-    user?.expoPushToken?.push(expoPushToken);
-    await user?.save({ validateBeforeSave: false });
-    // Send response
+    user.expoPushToken.push(expoPushToken);
+
+    await user.save({ validateBeforeSave: false });
+
     res.status(200).json({
       status: "success",
       message: "Expo notifications token set successfully",
-      data: {
-        user,
-      },
+      data: { user },
     });
   }
 );

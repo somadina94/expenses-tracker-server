@@ -9,6 +9,8 @@ const dbPassword = process.env.DATABASE_PASSWORD!;
 
 const DB = dbUrl.replace("<password>", dbPassword);
 
+console.log(DB);
+
 const connectDB = async () => {
   const database = await mongoose.connect(DB);
   if (database.STATES.connected === 1)
