@@ -8,7 +8,8 @@
     "build": "tsc && cp -r src/views dist/",
     "start": "node dist/server.js",
     "worker:notifications:dev": "tsx watch src/workers/notification-worker.ts",
-    "worker:notifications:prod": "node dist/workers/notification-worker.js"
+    "worker:notifications:prod": "node dist/workers/notification-worker.js",
+    "start:redis": "docker run --name dev-redis -p 6379:6379 -d redis:7-alpine"
   },
   "keywords": [],
   "author": "",
