@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import globalErrorHandler from "./controllers/errorController.js";
 import AppError from "./utils/appError.js";
 import userRouter from "./routes/userRoutes.js";
@@ -10,6 +11,8 @@ import notificationRouter from "./routes/notificationRoutes.js";
 import type { Request, Response, NextFunction } from "express";
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
