@@ -88,6 +88,7 @@ export class NotificationService {
                 title: notification.title,
                 body: notification.body,
                 data: notification.data,
+                notificationId: notification._id,
               })
             );
             return { status: "ok", token: token.endpoint };
