@@ -42,6 +42,18 @@ const userSchema = new mongoose.Schema<IUser>({
     type: [String],
     default: [],
   },
+  webPushToken: {
+    type: [
+      {
+        endpoint: String,
+        keys: {
+          p256dh: String,
+          auth: String,
+        },
+      },
+    ],
+    default: [],
+  },
   password: {
     type: String,
     required: [true, "Please provide a password"],

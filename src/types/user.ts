@@ -1,4 +1,5 @@
 import type { Document } from "mongoose";
+import type { WebPushToken } from "./webPushToken.js";
 
 export interface IUser extends Document {
   name: string;
@@ -13,6 +14,7 @@ export interface IUser extends Document {
   country?: string;
   currency?: string;
   expoPushToken?: string[];
+  webPushToken?: WebPushToken[];
 
   // Methods
   correctPassword(

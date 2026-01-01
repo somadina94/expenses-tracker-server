@@ -3,6 +3,17 @@ import { Expo, type ExpoPushMessage } from "expo-server-sdk";
 import Notification from "../models/notificationModel.js";
 import type { INotification } from "../types/notification.js";
 import type { NotificationDocument } from "../models/notificationModel.js";
+import webPush from "web-push";
+import User from "../models/userModel.js";
+
+const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY!;
+const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY!;
+
+webPush.setVapidDetails(
+  "mailto:support@jahbyte.com",
+  VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY
+);
 
 const expo = new Expo();
 
@@ -45,7 +56,7 @@ export class NotificationService {
    */
   static async send(notification: NotificationDocument): Promise<any> {
     try {
-      const messages: ExpoPushMessage[] = notification.to
+      const expoMessages: ExpoPushMessage[] = notification.to
         .filter((token) => Expo.isExpoPushToken(token))
         .map((token) => ({
           to: token,
@@ -59,37 +70,57 @@ export class NotificationService {
           expiration: notification.expiration as number,
         }));
 
-      if (!messages.length) {
-        await Notification.findByIdAndUpdate(notification._id, {
-          sendError: "No valid Expo push tokens",
-        });
-        return;
-      }
+      const expoResponse = expoMessages.length
+        ? await expo.sendPushNotificationsAsync(expoMessages)
+        : [];
 
-      const notificationResponse = await expo.sendPushNotificationsAsync(
-        messages
+      // ---- WEB PUSH ----
+      // Assume notification.userId references the recipient user
+      const user = await User.findById(notification.userId).lean();
+      const webPushTokens = user?.webPushToken ?? [];
+
+      const webPushResponses = await Promise.all(
+        webPushTokens.map(async (token) => {
+          try {
+            await webPush.sendNotification(
+              token,
+              JSON.stringify({
+                title: notification.title,
+                body: notification.body,
+                data: notification.data,
+              })
+            );
+            return { status: "ok", token: token.endpoint };
+          } catch (err: any) {
+            return {
+              status: "error",
+              token: token.endpoint,
+              message: err.message,
+            };
+          }
+        })
       );
 
-      notificationResponse.forEach(async (el) => {
-        if (el.status !== "ok") {
-          await Notification.findByIdAndUpdate(notification._id, {
-            sendError: el.message,
-          });
-        } else {
-          await Notification.findByIdAndUpdate(notification._id, {
-            sentAt: new Date(),
-            sendError: null,
-          });
-        }
+      // ---- UPDATE NOTIFICATION STATUS ----
+      const errors = [
+        ...expoResponse
+          .filter((el) => el.status !== "ok")
+          .map((el) => el.message),
+        ...webPushResponses
+          .filter((el) => el.status === "error")
+          .map((el) => el.message),
+      ];
+
+      await Notification.findByIdAndUpdate(notification._id, {
+        sentAt: new Date(),
+        sendError: errors.length ? errors.join("; ") : null,
       });
 
-      return notificationResponse;
+      return { expo: expoResponse, web: webPushResponses };
     } catch (err) {
       await Notification.findByIdAndUpdate(notification._id, {
-        sendError:
-          err instanceof Error ? err.message : "Unknown Expo send error",
+        sendError: err instanceof Error ? err.message : "Unknown send error",
       });
-
       throw err;
     }
   }

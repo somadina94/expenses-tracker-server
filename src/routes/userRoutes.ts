@@ -16,6 +16,7 @@ import {
   updateMe,
   setExpoPushToken,
   deleteMe,
+  setWebPushToken,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -38,6 +39,7 @@ router.get("/me", getMe);
 
 router.patch("/updateMe", updateMe);
 router.patch("/expoPushToken", setExpoPushToken);
+router.patch("/webPushToken", setWebPushToken);
 router.delete("/me", deleteMe);
 
 export default router;
