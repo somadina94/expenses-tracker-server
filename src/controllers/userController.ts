@@ -84,6 +84,47 @@ export const getMe = catchAsync(
   }
 );
 
+export const setWebPushToken = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { webPushToken } = req.body;
+
+    if (!webPushToken) {
+      return next(
+        new AppError("Please provide a valid web push notifications token", 400)
+      );
+    }
+
+    const user = await User.findById(req.user!._id);
+    if (!user) {
+      return next(new AppError("You are not logged in", 401));
+    }
+
+    let existing = false;
+
+    for (const token of user.webPushToken || []) {
+      if (token.endpoint === webPushToken.endpoint) {
+        existing = true;
+        break;
+      }
+    }
+
+    if (existing) {
+      return next(new AppError("User already subscribed", 401));
+    }
+
+    if (!existing) {
+      user.webPushToken?.push(webPushToken);
+      await user.save({ validateBeforeSave: false });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Web push notification subscribtion successful",
+      data: { user },
+    });
+  }
+);
+
 export const setExpoPushToken = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { expoPushToken } = req.body;
