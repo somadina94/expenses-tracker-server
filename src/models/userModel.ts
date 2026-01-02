@@ -1,13 +1,13 @@
-import mongoose, { Model, Query } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import validator from "validator";
 import Expense from "./expenseModel.js";
 import Budget from "./budgetModel.js";
 import Note from "./noteModel.js";
+import Notification from "./notificationModel.js";
 
 import type { IUser } from "../types/user.js";
-import type { NextFunction } from "express";
 
 const userSchema = new mongoose.Schema<IUser>({
   name: {
@@ -92,6 +92,7 @@ userSchema.post("findOneAndDelete", async function (doc: IUser | null) {
     Expense.deleteMany({ user: userId }),
     Budget.deleteMany({ userId }),
     Note.deleteMany({ userId }),
+    Notification.deleteMany({ userId }),
   ]);
 });
 
