@@ -61,10 +61,6 @@ mkdir -p logs
 echo "🛑 Stopping existing containers..."
 $DOCKER_COMPOSE down
 
-# Remove old images to free up space
-echo "🧹 Cleaning up old images..."
-docker image prune -f
-
 # Build and start the application
 echo "🔨 Building and starting the application..."
 echo "🔍 Verifying environment variables are available..."
