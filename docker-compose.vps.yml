@@ -1,0 +1,66 @@
+# Production stack for EC2 / VPS — used by ./deploy.sh (project: planary-server-vps)
+#
+# Normal deploy: API/worker image from GHCR. Redis from Docker Hub.
+# Secrets stay in host .env (never baked into the image).
+
+name: planary-server-vps
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: expenses-redis
+    restart: unless-stopped
+    # No host port — API/worker reach Redis at redis:6379 on the internal network.
+    networks:
+      - planary-server-vps-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  api:
+    image: ${PLANARY_SERVER_IMAGE:-ghcr.io/somadina94/expenses-tracker-server:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: expenses-app
+    ports:
+      - "${PORT:-6010}:${PORT:-6010}"
+    environment:
+      NODE_ENV: production
+      REDIS_URL: redis://redis:6379
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - planary-server-vps-network
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  notifications-worker:
+    image: ${PLANARY_SERVER_IMAGE:-ghcr.io/somadina94/expenses-tracker-server:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: notifications-worker
+    command: ["node", "dist/workers/notification-worker.js"]
+    environment:
+      NODE_ENV: production
+      REDIS_URL: redis://redis:6379
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - planary-server-vps-network
+    depends_on:
+      redis:
+        condition: service_healthy
+
+networks:
+  planary-server-vps-network:
+    driver: bridge
